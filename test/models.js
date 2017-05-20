@@ -1,30 +1,26 @@
 const chai = require('chai');
-const faker = require('faker');
 const mongoose = require('../mongoose');
 const config = require('../config');
+const mock = require('./mock');
 const {User} = require('../models/user');
 
 const should = chai.should();
-const userData = {
-  email: faker.internet.email(),
-  password: faker.internet.password()
-};
 
 describe('Test model', () => {
   before('Connect mongoose', () => mongoose.connect(config.MONGODB_URL));
   before('Clear database', () => mongoose.connection.dropDatabase());
 
   it('should save User', () =>
-    User.create(userData).then((user) => {
+    User.create(mock.user).then((user) => {
       user.email.should.be.a('string');
-      user.email.should.equal(userData.email);
-      userData.id = user.id;
+      user.email.should.equal(mock.user.email);
+      mock.user.id = user.id;
     })
   );
 
   it('should check User pasword', () =>
-    User.findById(userData.id)
-      .then((user) => user.checkPassword(userData.password))
+    User.findById(mock.user.id)
+      .then((user) => user.checkPassword(mock.user.password))
       .then((result) => result.should.be.ok)
   );
 
