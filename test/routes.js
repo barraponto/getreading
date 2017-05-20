@@ -33,6 +33,40 @@ describe('Test forms', () => {
       })
   );
 
+  it('should POST /users/signup form and fail required fields', () =>
+    chai.request(app).post('/users/signup')
+      .type('form').send({
+        email: mock.user.email,
+      }).catch((error) => {
+        console.log(error.response.body);
+        error.response.status.should.equal(400);
+      })
+  );
+
+  it('should POST /users/signup form and fail confirmed fields', () =>
+    chai.request(app).post('/users/signup')
+      .type('form').send({
+        email: mock.user.email,
+        password: mock.user.password,
+        "repeat-password": mock.user.password + '420',
+      }).catch((error) => {
+        console.log(error.response.body);
+        error.response.status.should.equal(400);
+      })
+  );
+
+  it('should POST /users/signup form and redirect to login', () =>
+    chai.request(app).post('/users/signup')
+      .type('form').send({
+        email: mock.user.email,
+        password: mock.user.password,
+        "repeat-password": mock.user.password,
+      }).then((response) => {
+        console.log(response.body);
+        response.status.should.equal(200);
+      })
+  );
+
   after('Clear database', () => mongoose.connection.dropDatabase());
   after('Disconnect mongoose', () => mongoose.disconnect());
 });
