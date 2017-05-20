@@ -27,4 +27,7 @@ describe('Test model', () => {
       .then((user) => user.checkPassword(userData.password))
       .then((result) => result.should.be.ok)
   );
+
+  after('Clear database', () => mongoose.connection.dropDatabase());
+  after('Disconnect mongoose', () => mongoose.disconnect());
 });
