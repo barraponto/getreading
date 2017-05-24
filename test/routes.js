@@ -28,6 +28,7 @@ describe('Test forms', () => {
           $(`input[name="${name}"]`).should.exist;
           $(`label[for="${name}"]`).should.exist;
         });
+        $('input[name="email"]').should.have.attr('type').equal('email');
         $('input[name="password"]').should.have.attr('type').equal('password');
         $('input[name="repeat-password"]').should.have.attr('type').equal('password');
       })
@@ -65,6 +66,24 @@ describe('Test forms', () => {
           `${response.request.protocol}//${response.request.host}/users/login`);
         response.status.should.equal(200);
       })
+  );
+
+  it('should GET /users/login form', () => chai.request(app)
+    .get('/users/login')
+    .then((response) => {
+      response.statusCode.should.equal(200);
+      response.type.should.equal('text/html');
+
+      const $ = cheerio.load(response.text);
+      $('form').should.exist;
+      $('form').should.have.attr('method').equal('POST');
+      ['email', 'password'].forEach((name) => {
+        $(`input[name="${name}"]`).should.exist;
+        $(`label[for="${name}"]`).should.exist;
+      });
+      $('input[name="email"]').should.have.attr('type').equal('email');
+      $('input[name="password"]').should.have.attr('type').equal('password');
+    })
   );
 
   after('Clear database', () => mongoose.connection.dropDatabase());
