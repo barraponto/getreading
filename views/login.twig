@@ -1,0 +1,17 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <form method="POST" action="/users/login">
+    <fieldset>
+      <legend>Login</legend>
+
+      <label for="email">Email</label>
+      <input type="text" name="email">
+
+      <label for="password">Password</label>
+      <input type="password" name="password">
+
+      <button>Login</button>
+    </fieldset>
+  </form>
+{% endblock %}

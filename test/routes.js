@@ -38,7 +38,6 @@ describe('Test forms', () => {
       .type('form').send({
         email: mock.user.email,
       }).catch((error) => {
-        console.log(error.response.body);
         error.response.status.should.equal(400);
       })
   );
@@ -50,7 +49,6 @@ describe('Test forms', () => {
         password: mock.user.password,
         "repeat-password": mock.user.password + '420',
       }).catch((error) => {
-        console.log(error.response.body);
         error.response.status.should.equal(400);
       })
   );
@@ -62,7 +60,9 @@ describe('Test forms', () => {
         password: mock.user.password,
         "repeat-password": mock.user.password,
       }).then((response) => {
-        console.log(response.body);
+        response.should.redirect;
+        response.should.redirectTo(
+          `${response.request.protocol}//${response.request.host}/users/login`);
         response.status.should.equal(200);
       })
   );

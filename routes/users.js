@@ -17,9 +17,12 @@ router.post('/signup',
   confirmedFields(['password', 'repeat-password']),
   (req, res) => { // actually creates the User
     User.create({email: req.body.email, password: req.body.password})
-    .then((user) => res.json(user))
+    .then((user) => res.redirect('/users/login'))
     .catch((err) => res.status(500).json({error: err}));
   }
 );
+
+/* GET user login form */
+router.get('/login', (req, res) => res.render('login'));
 
 module.exports = router;
