@@ -86,6 +86,18 @@ describe('Test forms', () => {
     })
   );
 
+  it('should POST /users/login form and fail', () => chai.request(app)
+    .post('/users/login')
+    .type('form')
+    .send({email: mock.user.email, password: mock.user.password + '420'})
+    .then((response) => {
+      response.should.redirect;
+      response.should.redirectTo(
+        `${response.request.protocol}//${response.request.host}/users/login`);
+      response.status.should.equal(200);
+    })
+  );
+
   it('should POST /users/login form', () => chai.request(app)
     .post('/users/login')
     .type('form')
@@ -95,7 +107,6 @@ describe('Test forms', () => {
       response.should.redirectTo(
         `${response.request.protocol}//${response.request.host}/`);
       response.status.should.equal(200);
-      console.log(response);
     })
   );
 
