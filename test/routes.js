@@ -86,6 +86,19 @@ describe('Test forms', () => {
     })
   );
 
+  it('should POST /users/login form', () => chai.request(app)
+    .post('/users/login')
+    .type('form')
+    .send({email: mock.user.email, password: mock.user.password})
+    .then((response) => {
+      response.should.redirect;
+      response.should.redirectTo(
+        `${response.request.protocol}//${response.request.host}/`);
+      response.status.should.equal(200);
+      console.log(response);
+    })
+  );
+
   after('Clear database', () => mongoose.connection.dropDatabase());
   after('Disconnect mongoose', () => mongoose.disconnect());
 });
