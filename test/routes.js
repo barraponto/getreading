@@ -38,8 +38,10 @@ describe('Test forms', () => {
     chai.request(app).post('/users/signup')
       .type('form').send({
         email: mock.user.email,
-      }).catch((error) => {
-        error.response.status.should.equal(400);
+      }).then((response) => {
+        response.should.redirect;
+        response.should.redirectTo(
+          `${response.request.protocol}//${response.request.host}/users/signup`);
       })
   );
 
