@@ -35,29 +35,40 @@ describe('Test forms', () => {
   );
 
   it('should POST /users/signup form and fail required fields', () =>
-    chai.request(app).post('/users/signup')
-      .type('form').send({
-        email: mock.user.email,
-      }).then((response) => {
+    chai.request.agent(app)
+      .post('/users/signup')
+      .type('form')
+      .send({email: mock.user.email})
+      .then((response) => {
         response.should.redirect;
         response.should.redirectTo(
           `${response.request.protocol}//${response.request.host}/users/signup`);
+
+        const $ = cheerio.load(response.text);
+        $('.error').should.exist;
+        $('.error').text().should.equal('password, repeat-password cannot be empty.');
       })
   );
 
   it('should POST /users/signup form and fail confirmed fields', () =>
-    chai.request(app).post('/users/signup')
+    chai.request.agent(app).post('/users/signup')
       .type('form').send({
         email: mock.user.email,
         password: mock.user.password,
         "repeat-password": mock.user.password + '420',
-      }).catch((error) => {
-        error.response.status.should.equal(400);
+      }).then((response) => {
+        response.should.redirect;
+        response.should.redirectTo(
+          `${response.request.protocol}//${response.request.host}/users/signup`);
+
+        const $ = cheerio.load(response.text);
+        $('.error').should.exist;
+        $('.error').text().should.equal('repeat-password has a different value from password.');
       })
   );
 
   it('should POST /users/signup form and redirect to login', () =>
-    chai.request(app).post('/users/signup')
+    chai.request.agent(app).post('/users/signup')
       .type('form').send({
         email: mock.user.email,
         password: mock.user.password,
@@ -66,7 +77,6 @@ describe('Test forms', () => {
         response.should.redirect;
         response.should.redirectTo(
           `${response.request.protocol}//${response.request.host}/users/login`);
-        response.status.should.equal(200);
       })
   );
 
@@ -88,7 +98,7 @@ describe('Test forms', () => {
     })
   );
 
-  it('should POST /users/login form and fail', () => chai.request(app)
+  it('should POST /users/login form and fail', () => chai.request.agent(app)
     .post('/users/login')
     .type('form')
     .send({email: mock.user.email, password: mock.user.password + '420'})
@@ -96,11 +106,14 @@ describe('Test forms', () => {
       response.should.redirect;
       response.should.redirectTo(
         `${response.request.protocol}//${response.request.host}/users/login`);
-      response.status.should.equal(200);
+
+        const $ = cheerio.load(response.text);
+        $('.error').should.exist;
+        $('.error').text().should.equal('The username or password entered is incorrect.');
     })
   );
 
-  it('should POST /users/login form', () => chai.request(app)
+  it('should POST /users/login form', () => chai.request.agent(app)
     .post('/users/login')
     .type('form')
     .send({email: mock.user.email, password: mock.user.password})
