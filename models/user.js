@@ -9,15 +9,16 @@ const UserSchema = mongoose.Schema({
 
 UserSchema.pre('save', function(next) {
   const user = this;
-  if (!user.isModified('password')) { next(); }
-  else {
+  if (user.isModified('password')) {
     bcrypt.genSalt(config.SALT_WORK_FACTOR)
-    .then((salt) => bcrypt.hash(user.password, salt))
-    .then((hash) => {
-      user.password = hash;
-      next();
-    })
-    .catch((err) => next(err));
+      .then((salt) => bcrypt.hash(user.password, salt))
+      .then((hash) => {
+        user.password = hash;
+        next();
+      })
+      .catch((err) => next(err));
+  } else {
+    next();
   }
 });
 
