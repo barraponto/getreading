@@ -42,6 +42,9 @@ describe('Test forms', () => {
         response.should.redirect;
         response.should.redirectTo(
           `${response.request.protocol}//${response.request.host}/users/signup`);
+        console.log(response.status);
+        console.log(response.body);
+        // how to check the body for the flashed message?
       })
   );
 
