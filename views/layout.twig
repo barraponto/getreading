@@ -5,6 +5,9 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
+    {% for message in messages.error %}
+      <div class="error">{{ message }}</div>
+    {% endfor %}
     {% block body %}{% endblock %}
   </body>
 </html>
