@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 chai.use(chaiCheerio);
 const should = chai.should();
 
-describe('Test forms', () => {
+describe('Test Login and Signup forms', () => {
   before('Connect mongoose', () => mongoose.connect(config.MONGODB_URL));
   before('Clear database', () => mongoose.connection.dropDatabase());
 
