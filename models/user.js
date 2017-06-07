@@ -5,6 +5,7 @@ const config = require('../config');
 const UserSchema = mongoose.Schema({
   email: {type: String, required: true, index: {unique: true}},
   password: {type: String, required: true},
+  library: [{type: mongoose.Schema.Types.ObjectId, ref: 'Book'}]
 });
 
 UserSchema.pre('save', function(next) {

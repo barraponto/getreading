@@ -27,7 +27,6 @@ describe('Test model', () => {
 
   it('should save Book', () =>
     Book.create(mock.book).then((book) => {
-      console.log(book);
       book.title.should.be.a('string');
       book.title.should.equal(mock.book.title);
       book.author.should.be.a('string');
@@ -36,6 +35,15 @@ describe('Test model', () => {
       book.pages.should.equal(mock.book.pages);
       mock.book.id = book.id;
     })
+  );
+
+  it('should add book to User library', () =>
+    User.findByIdAndUpdate(
+      mock.user.id, {$push: {library: mock.book.id}}, {new: true})
+      .then((user) => {
+        user.library.should.be.an('array');
+        user.library.should.contain(mock.book.id);
+      })
   );
 
   after('Clear database', () => mongoose.connection.dropDatabase());
