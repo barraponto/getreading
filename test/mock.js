@@ -5,4 +5,10 @@ const user = {
   password: faker.internet.password()
 };
 
-module.exports = {user};
+const book = {
+  title: faker.hacker.phrase(),
+  author: faker.name.findName(),
+  pages: faker.random.number({min: 50, max: 420})
+};
+
+module.exports = {book, user};
