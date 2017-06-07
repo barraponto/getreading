@@ -38,8 +38,8 @@ describe('Test model', () => {
   );
 
   it('should add book to User library', () =>
-    User.findByIdAndUpdate(
-      mock.user.id, {$push: {library: mock.book.id}}, {new: true})
+      User.findById(mock.user.id)
+      .then((user) => user.addBook(mock.book.id))
       .then((user) => {
         user.library.should.be.an('array');
         user.library.should.contain(mock.book.id);

@@ -27,6 +27,11 @@ UserSchema.methods.checkPassword = function(password) {
   return bcrypt.compare(password, this.password);
 }
 
+UserSchema.methods.addBook = function(book) {
+  // @TODO: findByIdAndUpdate doesn't trigger middlewares (like pre-save).
+  return User.findByIdAndUpdate(this.id, {$push: {library: book}}, {new: true});
+};
+
 const User = mongoose.model('User', UserSchema);
 
 module.exports = {User};
