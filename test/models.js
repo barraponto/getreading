@@ -46,6 +46,16 @@ describe('Test model', () => {
       })
   );
 
+  it('should check if a User owns a book', () =>
+      User.findById(mock.user.id)
+      .then((user) => user.owns(mock.book.id).should.be.ok)
+  );
+
+  it('should check if a populated User owns a book', () =>
+      User.findById(mock.user.id).populate('library')
+      .then((user) => user.owns(mock.book.id).should.be.ok)
+  );
+
   after('Clear database', () => mongoose.connection.dropDatabase());
   after('Disconnect mongoose', () => mongoose.disconnect());
 });

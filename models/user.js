@@ -32,6 +32,10 @@ UserSchema.methods.addBook = function(book) {
   return User.findByIdAndUpdate(this.id, {$push: {library: book}}, {new: true});
 };
 
+UserSchema.methods.owns = function(candidate) {
+  return this.library.some((book) => book.equals(candidate))
+}
+
 const User = mongoose.model('User', UserSchema);
 
 module.exports = {User};
