@@ -16,15 +16,15 @@
     "express": "~4.15.2",
     "express-flash": "^0.0.2",
     "express-session": "^1.15.3",
-    "mongoose": "^4.10.0",
+    "mongoose": "^4.10.7",
     "morgan": "~1.8.1",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "serve-favicon": "~2.4.2",
-    "twig": "~0.10.3"
+    "twig": "^1.10.5"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.0.2",
     "chai-cheerio": "^1.0.0",
     "chai-http": "^3.0.0",
     "cheerio": "^0.22.0",
