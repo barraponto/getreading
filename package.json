@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start:mongo": "mongod --dbpath data --nojournal",
-    "start:express": "nodemon ./bin/www",
-    "start": "run-p start:*",
+    "dev:mongo": "mongod --dbpath data --nojournal",
+    "dev:express": "nodemon ./bin/www",
+    "dev": "run-p start:*",
+    "start": "./bin/www",
     "test": "NODE_ENV=testing mocha test/"
   },
   "dependencies": {
