@@ -28,7 +28,7 @@ server.on('listening', onListening);
 /**
  * Connect to mongo, then listen on provided port, on all network interfaces.
  */
-mongoose.connect(config.MONGODB_URL)
+mongoose.connect(config.MONGODB_URL, {useMongoClient: true})
   .then(() => server.listen(port))
   .then(() => console.log(`Your app is listening on port ${port}`))
   .catch((err) => console.error(err))
