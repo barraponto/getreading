@@ -25,7 +25,7 @@ UserSchema.pre('save', function(next) {
 
 UserSchema.methods.checkPassword = function(password) {
   return bcrypt.compare(password, this.password);
-}
+};
 
 UserSchema.methods.addBook = function(book) {
   // @TODO: findByIdAndUpdate doesn't trigger middlewares (like pre-save).
@@ -34,7 +34,7 @@ UserSchema.methods.addBook = function(book) {
 
 UserSchema.methods.owns = function(candidate) {
   return this.library.some((book) => book.equals(candidate))
-}
+};
 
 const User = mongoose.model('User', UserSchema);
 
