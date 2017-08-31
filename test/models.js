@@ -69,6 +69,6 @@ describe('Test model', () => {
       .then(([user, book]) => user.owns(book.id).should.be.ok)
   });
 
-  afterEach('Clear database', () => mongoose.connection.dropDatabase());
+  after('Clear database', () => mongoose.connection.dropDatabase());
   after('Disconnect mongoose', () => mongoose.disconnect());
 });

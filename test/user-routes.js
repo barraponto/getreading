@@ -13,7 +13,7 @@ const should = chai.should();
 
 describe('Test Login and Signup forms', () => {
   before('Connect mongoose', () => mongoose.connect(config.MONGODB_URL, {useMongoClient: true}));
-  before('Clear database', () => mongoose.connection.dropDatabase());
+  beforeEach('Clear database', () => mongoose.connection.dropDatabase());
 
   it('should GET the /users/signup form', () =>
     chai.request(app).get('/users/signup')
