@@ -6,6 +6,7 @@ const app = require('../app');
 const mongoose = require('../mongoose');
 const config = require('../config');
 const mock = require('./mock');
+const {User} = require('../models/user');
 
 chai.use(chaiHttp);
 chai.use(chaiCheerio);
@@ -45,14 +46,14 @@ describe('Test Login and Signup forms', () => {
         response.should.redirectTo(
           `${response.request.protocol}//${response.request.host}/users/signup`);
         const $ = cheerio.load(response.text);
-        $('.error').should.exist;
-        $('.error').text().should.equal('password, repeat-password cannot be empty.');
+        $('.alert-danger').should.exist;
+        $('.alert-danger').text().should.equal('password, repeat-password cannot be empty.');
       });
   });
 
   it('should POST /users/signup form and fail confirmed fields', () => {
     const user = mock.user();
-    chai.request.agent(app).post('/users/signup')
+    return chai.request.agent(app).post('/users/signup')
       .type('form').send({
         email: user.email,
         password: user.password,
@@ -63,14 +64,14 @@ describe('Test Login and Signup forms', () => {
           `${response.request.protocol}//${response.request.host}/users/signup`);
 
         const $ = cheerio.load(response.text);
-        $('.error').should.exist;
-        $('.error').text().should.equal('repeat-password has a different value from password.');
+        $('.alert-danger').should.exist;
+        $('.alert-danger').text().should.equal('repeat-password has a different value from password.');
       })
   });
 
   it('should POST /users/signup form and redirect to login', () => {
     const user = mock.user();
-    chai.request.agent(app)
+    return chai.request.agent(app)
       .post('/users/signup')
       .type('form')
       .send({
@@ -105,7 +106,7 @@ describe('Test Login and Signup forms', () => {
 
   it('should POST /users/login form and fail', () => {
     const user = mock.user();
-    chai.request.agent(app)
+    return chai.request.agent(app)
       .post('/users/login')
       .type('form')
       .send({email: user.email, password: user.password + '420'})
@@ -114,17 +115,18 @@ describe('Test Login and Signup forms', () => {
         response.should.redirectTo(
           `${response.request.protocol}//${response.request.host}/users/login`);
         const $ = cheerio.load(response.text);
-        $('.error').should.exist;
-        $('.error').text().should.equal('The username or password entered is incorrect.');
+        $('.alert-danger').should.exist;
+        $('.alert-danger').text().should.equal('The username or password entered is incorrect.');
     })
   });
 
   it('should POST /users/login form', () => {
     const user = mock.user();
-    chai.request.agent(app)
-      .post('/users/login')
-      .type('form')
-      .send({email: user.email, password: user.password})
+    return User.create(user)
+      .then(() => chai.request.agent(app)
+        .post('/users/login')
+        .type('form')
+        .send({email: user.email, password: user.password}))
       .then((response) => {
         response.should.redirect;
         response.should.redirectTo(
