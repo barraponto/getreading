@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev:mongo": "mongod --dbpath data --nojournal",
-    "dev:express": "nodemon ./bin/www",
+    "dev:express": "nodemon -e 'js twig' ./bin/www",
     "dev": "run-p dev:*",
     "start": "./bin/www",
     "test": "NODE_ENV=testing mocha test/"
