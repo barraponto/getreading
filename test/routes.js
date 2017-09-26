@@ -13,7 +13,7 @@ const should = chai.should();
 
 describe('Test forms', () => {
   before('Connect mongoose', () => mongoose.connect(config.MONGODB_URL));
-  before('Clear database', () => mongoose.connection.dropDatabase());
+  before('Clear database', mongoose.connection.dropDatabase);
 
   it('should GET the /users/signup form', () =>
     chai.request(app).get('/users/signup')
@@ -115,6 +115,6 @@ describe('Test forms', () => {
     })
   );
 
-  after('Clear database', () => mongoose.connection.dropDatabase());
-  after('Disconnect mongoose', () => mongoose.disconnect());
+  after('Clear database', mongoose.connection.dropDatabase);
+  after('Disconnect mongoose', mongoose.disconnect);
 });
