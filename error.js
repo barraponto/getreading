@@ -10,7 +10,7 @@ const formErrorMiddleware = (err, req, res, next) => {
     req.flash('error', err.message);
     res.redirect(req.originalUrl);
   } else {
-    next();
+    next(err);
   }
 };
 
