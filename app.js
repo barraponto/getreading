@@ -32,6 +32,14 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/protected',
+  (req, res, next) => {
+    if (req.user) { next(); }
+    else { next({status: 401, message: "Logged-in users only!"}); }
+  },
+  (req, res) => res.sendStatus(200)
+);
+
 app.use('/', index);
 app.use('/users', users);
 
