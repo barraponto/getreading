@@ -1,5 +1,8 @@
 const {FormError} = require('../error');
 
+const authenticationRequired = (req, res, next) =>
+  req.isAuthenticated() ? next() : next({status: 401, message: "Authentication required."})
+
 const routeNotFound = (req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
@@ -29,6 +32,7 @@ const confirmedFields = (...pairs) => (req, res, next) => {
 };
 
 module.exports = {
+  authenticationRequired,
   confirmedFields,
   requiredFields,
   routeNotFound

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {passport} = require('../passport');
 const {Book} = require('../models/user');
-const {requiredFields} = require('./utils');
+const {requiredFields, authenticationRequired} = require('./utils');
 
 /* GET books listing. */
 /* @TODO: implement book listing */
@@ -10,6 +10,7 @@ router.get('/');
 
 /* GET book add form */
 router.get('/add',
+  authenticationRequired,
   (req, res) => res.render('book-add')
 );
 
