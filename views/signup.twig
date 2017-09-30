@@ -1,20 +1,31 @@
 {% extends 'layout.twig' %}
 
 {% block body %}
-  <form method="POST" action="/users/signup">
-    <fieldset>
-      <legend>Sign Up and GetReading!</legend>
+  <form method="POST" action="/users/signup" class="form-horizontal">
+      <h2>Sign Up and GetReading!</h2>
 
-      <label for="email">Email</label>
-      <input type="email" name="email">
+    <div class="form-group">
+      <label class="col-sm-2" for="email">Email</label>
+      <div class="col-sm-10">
+        <input type="email" name="email">
+      </div>
+    </div>
 
-      <label for="password">Password</label>
-      <input type="password" name="password">
+    <div class="form-group">
+      <label class="col-sm-2" for="password">Password</label>
+      <div class="col-sm-10">
+        <input type="password" name="password">
+      </div>
+    </div>
 
-      <label for="repeat-password">Repeat Password</label>
-      <input type="password" name="repeat-password">
+    <div class="form-group">
+      <label class="col-sm-2" for="repeat-password">Repeat Password</label>
+      <div class="col-sm-10">
+        <input type="password" name="repeat-password">
+      </div>
+    </div>
 
-      <button>Sign Up</button>
+    <button class="btn btn-default">Sign Up</button>
     </fieldset>
   </form>
 {% endblock %}
