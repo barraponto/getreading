@@ -8,8 +8,14 @@ const {Book} = require('../models/book');
 const should = chai.should();
 
 describe('Test model', () => {
-  before('Connect mongoose', () => mongoose.connect(config.MONGODB_URL, {useMongoClient: true}));
-  beforeEach('Clear database', () => mongoose.connection.dropDatabase());
+  before('Connect mongoose', () => mongoose.connect(config.MONGODB_URL, {useMongoClient: true})
+    .catch((err) => console.log(['connect error', err])));
+  beforeEach('Clear database', () => mongoose.connection.dropDatabase()
+    .catch((err) => console.log(['before each clear error', err])));
+  after('Clear database', () => mongoose.connection.dropDatabase()
+    .catch((err) => console.log(['after clear error', err])));
+  after('Disconnect mongoose', () => mongoose.disconnect()
+    .catch((err) => console.log(['disconnect error', err])));
 
   it('should save User', () => {
     const userData = mock.user();
@@ -17,7 +23,7 @@ describe('Test model', () => {
       .then((user) => {
         user.email.should.be.a('string');
         user.email.should.equal(userData.email);
-      })
+      });
   });
 
   it('should check User pasword', () => {
@@ -25,7 +31,7 @@ describe('Test model', () => {
     return User.create(userData)
       .then((user) => User.findById(user.id))
       .then((user) => user.checkPassword(userData.password))
-      .then((result) => result.should.be.ok)
+      .then((result) => result.should.be.ok);
   });
 
   it('should save Book', () => {
@@ -38,7 +44,7 @@ describe('Test model', () => {
         book.author.should.equal(bookData.author);
         book.pages.should.be.a('number');
         book.pages.should.equal(bookData.pages);
-      })
+      });
   });
 
   it('should add book to User library', () => {
@@ -49,7 +55,7 @@ describe('Test model', () => {
       .then(([user, book]) => {
         user.library.should.be.an('array');
         user.library.should.contain(book.id);
-      })
+      });
   });
 
   it('should check if an User owns a book', () => {
@@ -57,7 +63,7 @@ describe('Test model', () => {
     const bookData = mock.book();
     return Promise.all([User.create(userData), Book.create(bookData)])
       .then(([user, book]) => Promise.all([user.addBook(book.id), book]))
-      .then(([user, book]) => user.owns(book.id).should.be.ok)
+      .then(([user, book]) => user.owns(book.id).should.be.ok);
   });
 
   it('should check if a populated User owns a book', () => {
@@ -66,9 +72,6 @@ describe('Test model', () => {
     return Promise.all([User.create(userData), Book.create(bookData)])
       .then(([user, book]) => Promise.all([user.addBook(book.id), book]))
       .then(([user, book]) => Promise.all([User.findById(user.id).populate('library'), book]))
-      .then(([user, book]) => user.owns(book.id).should.be.ok)
+      .then(([user, book]) => user.owns(book.id).should.be.ok);
   });
-
-  after('Clear database', () => mongoose.connection.dropDatabase());
-  after('Disconnect mongoose', () => mongoose.disconnect());
 });

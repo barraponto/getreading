@@ -1,5 +1,5 @@
 const chai = require('chai');
-const chaiCheerio = require('chai-cheerio')
+const chaiCheerio = require('chai-cheerio');
 const chaiHttp = require('chai-http');
 const cheerio = require('cheerio');
 const app = require('../app');
@@ -13,8 +13,14 @@ chai.use(chaiCheerio);
 const should = chai.should();
 
 describe('Test Login and Signup forms', () => {
-  before('Connect mongoose', () => mongoose.connect(config.MONGODB_URL, {useMongoClient: true}));
-  beforeEach('Clear database', () => mongoose.connection.dropDatabase());
+  before('Connect mongoose', () => mongoose.connect(config.MONGODB_URL, {useMongoClient: true})
+    .catch((err) => console.log(['connect error', err])));
+  beforeEach('Clear database', () => mongoose.connection.dropDatabase()
+    .catch((err) => console.log(['before each clear error', err])));
+  after('Clear database', () => mongoose.connection.dropDatabase()
+    .catch((err) => console.log(['after clear error', err])));
+  after('Disconnect mongoose', () => mongoose.disconnect()
+    .catch((err) => console.log(['disconnect error', err])));
 
   it('should GET the /users/signup form', () =>
     chai.request(app).get('/users/signup')
@@ -66,7 +72,7 @@ describe('Test Login and Signup forms', () => {
         const $ = cheerio.load(response.text);
         $('.alert-danger').should.exist;
         $('.alert-danger').text().should.equal('repeat-password has a different value from password.');
-      })
+      });
   });
 
   it('should POST /users/signup form and redirect to login', () => {
@@ -83,7 +89,7 @@ describe('Test Login and Signup forms', () => {
         response.should.redirect;
         response.should.redirectTo(
           `${response.request.protocol}//${response.request.host}/users/login`);
-      })
+      });
   });
 
   it('should GET /users/login form', () => chai.request(app)
@@ -109,7 +115,7 @@ describe('Test Login and Signup forms', () => {
     return chai.request.agent(app)
       .post('/users/login')
       .type('form')
-      .send({email: user.email, password: user.password + '420'})
+      .send({email: user.email, password: user.password})
       .then((response) => {
         response.should.redirect;
         response.should.redirectTo(
@@ -117,7 +123,7 @@ describe('Test Login and Signup forms', () => {
         const $ = cheerio.load(response.text);
         $('.alert-danger').should.exist;
         $('.alert-danger').text().should.equal('The username or password entered is incorrect.');
-    })
+    });
   });
 
   it('should POST /users/login form', () => {
@@ -132,9 +138,6 @@ describe('Test Login and Signup forms', () => {
         response.should.redirectTo(
           `${response.request.protocol}//${response.request.host}/`);
         response.status.should.equal(200);
-      })
+      });
   });
-
-  after('Clear database', () => mongoose.connection.dropDatabase());
-  after('Disconnect mongoose', () => mongoose.disconnect());
 });
