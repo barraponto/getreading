@@ -1,0 +1,16 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <form method="POST" action="/books/add" class="form-horizontal">
+      <h2>Add book</h2>
+
+    <div class="form-group">
+      <label class="col-sm-2" for="title">Title</label>
+      <div class="col-sm-10">
+        <input type="text" name="title">
+      </div>
+    </div>
+
+    <button class="btn btn-default">Add</button>
+  </form>
+{% endblock %}

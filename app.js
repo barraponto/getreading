@@ -12,6 +12,7 @@ const {passport} = require('./passport');
 const {routeNotFound} = require('./routes/utils');
 const index = require('./routes/index');
 const users = require('./routes/users');
+const books = require('./routes/books');
 const {formErrorMiddleware, genericErrorMiddleware} = require('./error');
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(passport.session());
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/books', books);
 
 // catch 404 and forward to error handler
 app.use(routeNotFound);
